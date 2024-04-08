@@ -18,7 +18,12 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
-
+    buildFeatures {
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.11"
+    }
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -48,7 +53,6 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.dagger.hilt.android)
-    implementation(libs.hilt.navigation.compose)
     ksp(libs.dagger.hilt.compiler)
     ksp(libs.hilt.compiler)
     implementation(libs.paging.runtime)
