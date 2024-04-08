@@ -6,8 +6,11 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -47,7 +50,9 @@ internal fun ChatScreen(
 
     ChatScreen(
         onBack = onBack,
+        onSendClick = viewModel::sendMessage,
         onSwitchUserClick = viewModel::switchUser,
+        onTextChange = viewModel::onTextChange,
         viewState = viewState,
     )
 }
@@ -55,10 +60,13 @@ internal fun ChatScreen(
 @Composable
 private fun ChatScreen(
     onBack: () -> Unit,
+    onSendClick: () -> Unit,
     onSwitchUserClick: () -> Unit,
+    onTextChange: (String) -> Unit,
     viewState: ChatViewState,
 ) {
     Scaffold(
+        modifier = Modifier.imePadding(),
         topBar = {
             TopBar(
                 currentUser = viewState.currentUser,
@@ -67,10 +75,19 @@ private fun ChatScreen(
             )
         },
     ) { contentPadding ->
-        Box(
-            modifier = Modifier.padding(contentPadding)
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(contentPadding)
         ) {
             // TODO chat UI
+            Box(modifier = Modifier.weight(1f))
+            SendMessageBar(
+                color = viewState.currentUser.color,
+                onSendClick = onSendClick,
+                onTextChange = onTextChange,
+                text = viewState.messageText,
+            )
         }
     }
 }
@@ -147,7 +164,9 @@ private fun TopBar(
 internal fun ChatScreenPreview() {
     ChatScreen(
         onBack = {},
+        onSendClick = {},
         onSwitchUserClick = {},
+        onTextChange = {},
         viewState = ChatViewState(),
     )
 }

@@ -17,8 +17,19 @@ internal class ChatViewModel @Inject constructor() : ViewModel() {
 
     fun switchUser() {
         updateState {
-            copy(currentUser = if (currentUser == FEMALE) MALE else FEMALE)
+            copy(
+                currentUser = if (currentUser == FEMALE) MALE else FEMALE,
+                messageText = "",
+            )
         }
+    }
+
+    fun onTextChange(text: String) {
+        updateState { copy(messageText = text) }
+    }
+
+    fun sendMessage() {
+        // TODO add sending logic
     }
 
     private fun updateState(updater: ChatViewState.() -> ChatViewState) {
@@ -28,4 +39,5 @@ internal class ChatViewModel @Inject constructor() : ViewModel() {
 
 internal data class ChatViewState(
     val currentUser: CurrentUser = FEMALE,
+    val messageText: String = "",
 )
