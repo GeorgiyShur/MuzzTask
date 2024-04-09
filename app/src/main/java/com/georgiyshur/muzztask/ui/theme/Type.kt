@@ -19,4 +19,10 @@ val Typography = Typography(
         fontSize = 16.sp,
         lineHeight = 24.sp,
     ),
+    labelLarge = TextStyle(
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.Bold,
+        fontSize = 12.sp,
+        lineHeight = 16.sp,
+    ),
 )
