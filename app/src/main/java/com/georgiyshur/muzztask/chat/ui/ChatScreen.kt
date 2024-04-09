@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.DropdownMenu
@@ -41,16 +42,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.paging.PagingData
-import androidx.paging.compose.collectAsLazyPagingItems
 import com.georgiyshur.muzztask.R
 import com.georgiyshur.muzztask.chat.presentation.ChatItem
 import com.georgiyshur.muzztask.chat.presentation.ChatViewModel
 import com.georgiyshur.muzztask.chat.presentation.ChatViewState
 import com.georgiyshur.muzztask.chat.presentation.CurrentUser
 import com.georgiyshur.muzztask.ui.theme.Typography
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
+import java.time.LocalDateTime
 
 @Composable
 internal fun ChatScreen(
@@ -60,7 +58,6 @@ internal fun ChatScreen(
     val viewState by viewModel.viewStateFlow.collectAsState()
 
     ChatScreen(
-        chatPagingDataFlow = viewModel.chatPagingDataFlow,
         onBack = onBack,
         onSendClick = viewModel::sendMessage,
         onSwitchUserClick = viewModel::switchUser,
@@ -71,7 +68,6 @@ internal fun ChatScreen(
 
 @Composable
 private fun ChatScreen(
-    chatPagingDataFlow: Flow<PagingData<ChatItem>>,
     onBack: () -> Unit,
     onSendClick: () -> Unit,
     onSwitchUserClick: () -> Unit,
@@ -94,8 +90,8 @@ private fun ChatScreen(
                 .padding(contentPadding)
         ) {
             MessagesContent(
+                chatData = viewState.chatData,
                 color = viewState.currentUser.color,
-                pagingDataFlow = chatPagingDataFlow,
             )
             Box(modifier = Modifier.weight(1f))
             SendMessageBar(
@@ -178,11 +174,10 @@ private fun TopBar(
 
 @Composable
 private fun MessagesContent(
+    chatData: List<ChatItem>,
     color: Color,
-    pagingDataFlow: Flow<PagingData<ChatItem>>,
 ) {
     val lazyListState = rememberLazyListState()
-    val pagingItems = pagingDataFlow.collectAsLazyPagingItems()
 
     LazyColumn(
         modifier = Modifier.wrapContentHeight(),
@@ -191,16 +186,12 @@ private fun MessagesContent(
         verticalArrangement = Arrangement.Bottom,
         contentPadding = PaddingValues(vertical = 8.dp),
     ) {
-        items(
-            count = pagingItems.itemCount,
-            itemContent = { index ->
-                val item = pagingItems[index] ?: return@items
-                ChatItem(
-                    color = color,
-                    item = item,
-                )
-            }
-        )
+        items(chatData) { item ->
+            ChatItem(
+                color = color,
+                item = item,
+            )
+        }
     }
 }
 
@@ -208,38 +199,35 @@ private fun MessagesContent(
 @Preview
 internal fun ChatScreenPreview() {
     ChatScreen(
-        chatPagingDataFlow = flowOf(
-            PagingData.from(
-                listOf(
-                    ChatItem.DateTime("Thursday 11:59"),
-                    ChatItem.Message(
-                        isRead = true,
-                        isSentByCurrentUser = false,
-                        text = "Hello, how is it going?",
-                    ),
-                    ChatItem.Message(
-                        isRead = true,
-                        isSentByCurrentUser = true,
-                        text = "Hiii, this is a long pre-populated message to showcase sectioning",
-                    ),
-                    ChatItem.DateTime("Thursday 17:45"),
-                    ChatItem.Message(
-                        isRead = false,
-                        isSentByCurrentUser = false,
-                        text = "Sure, when do you want to go?",
-                    ),
-                    ChatItem.Message(
-                        isRead = false,
-                        isSentByCurrentUser = true,
-                        text = "Idk, how about tomorrow morning?",
-                    ),
-                )
-            )
-        ),
         onBack = {},
         onSendClick = {},
         onSwitchUserClick = {},
         onTextChange = {},
-        viewState = ChatViewState(),
+        viewState = ChatViewState(
+            chatData = listOf(
+                ChatItem.DateTime(LocalDateTime.parse("2024-04-09T11:59:00")),
+                ChatItem.Message(
+                    isRead = true,
+                    isSentByCurrentUser = false,
+                    text = "Hello, how is it going?",
+                ),
+                ChatItem.Message(
+                    isRead = true,
+                    isSentByCurrentUser = true,
+                    text = "Hiii, this is a long pre-populated message to showcase sectioning",
+                ),
+                ChatItem.DateTime(LocalDateTime.parse("2024-04-09T14:13:00")),
+                ChatItem.Message(
+                    isRead = false,
+                    isSentByCurrentUser = false,
+                    text = "Sure, when do you want to go?",
+                ),
+                ChatItem.Message(
+                    isRead = false,
+                    isSentByCurrentUser = true,
+                    text = "Idk, how about tomorrow morning?",
+                ),
+            )
+        ),
     )
 }

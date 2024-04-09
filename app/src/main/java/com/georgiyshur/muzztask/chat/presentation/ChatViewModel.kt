@@ -1,53 +1,43 @@
 package com.georgiyshur.muzztask.chat.presentation
 
 import androidx.lifecycle.ViewModel
-import androidx.paging.PagingData
+import androidx.lifecycle.viewModelScope
+import com.georgiyshur.muzztask.chat.domain.usecase.CreateMessageUseCase
+import com.georgiyshur.muzztask.chat.domain.usecase.GetMessagesFlowUseCase
 import com.georgiyshur.muzztask.chat.presentation.CurrentUser.Companion.FEMALE
 import com.georgiyshur.muzztask.chat.presentation.CurrentUser.Companion.MALE
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-internal class ChatViewModel @Inject constructor() : ViewModel() {
+internal class ChatViewModel @Inject constructor(
+    chatDataConverter: ChatDataConverter,
+    private val createMessage: CreateMessageUseCase,
+    getMessagesFlow: GetMessagesFlowUseCase,
+) : ViewModel() {
 
     private val _viewStateFlow = MutableStateFlow(ChatViewState())
     val viewStateFlow get() = _viewStateFlow.asStateFlow()
 
-    val chatPagingDataFlow: Flow<PagingData<ChatItem>> by lazy {
-        // TODO get data from Room DB
-        flowOf(
-            PagingData.from(
-                listOf(
-                    ChatItem.DateTime("Thursday 11:59"),
-                    ChatItem.Message(
-                        isRead = true,
-                        isSentByCurrentUser = false,
-                        text = "Hello, how is it going?",
-                    ),
-                    ChatItem.Message(
-                        isRead = true,
-                        isSentByCurrentUser = true,
-                        text = "Hiii, this is a long pre-populated message to showcase sectioning",
-                    ),
-                    ChatItem.DateTime("Thursday 17:45"),
-                    ChatItem.Message(
-                        isRead = false,
-                        isSentByCurrentUser = false,
-                        text = "Sure, when do you want to go?",
-                    ),
-                    ChatItem.Message(
-                        isRead = false,
-                        isSentByCurrentUser = true,
-                        text = "Idk, how about tomorrow morning?",
-                    ),
-                ).reversed()
-            )
-        )
+    init {
+        getMessagesFlow.execute()
+            .onEach { messages ->
+                updateState {
+                    copy(
+                        chatData = chatDataConverter.convertMessages(
+                            currentUserId = viewStateFlow.value.currentUser.id,
+                            messages = messages,
+                        )
+                    )
+                }
+            }
+            .launchIn(viewModelScope)
     }
 
     fun switchUser() {
@@ -64,7 +54,13 @@ internal class ChatViewModel @Inject constructor() : ViewModel() {
     }
 
     fun sendMessage() {
-        // TODO add sending logic
+        viewModelScope.launch {
+            createMessage.execute(
+                creatorId = viewStateFlow.value.currentUser.id,
+                text = viewStateFlow.value.messageText,
+            )
+            updateState { copy(messageText = "") }
+        }
     }
 
     private fun updateState(updater: ChatViewState.() -> ChatViewState) {
@@ -74,5 +70,6 @@ internal class ChatViewModel @Inject constructor() : ViewModel() {
 
 internal data class ChatViewState(
     val currentUser: CurrentUser = FEMALE,
+    val chatData: List<ChatItem> = emptyList(),
     val messageText: String = "",
 )

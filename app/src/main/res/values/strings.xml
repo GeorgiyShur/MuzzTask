@@ -4,4 +4,6 @@
     <string name="menu">Menu</string>
     <string name="switch_user">Switch user</string>
     <string name="send">Send</string>
+    <string name="today_format">Today %s</string>
+    <string name="yesterday_format">Yesterday %s</string>
 </resources>

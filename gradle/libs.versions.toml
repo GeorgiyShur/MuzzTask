@@ -9,6 +9,8 @@ composeBom = "2024.04.00"
 dagger = "2.51"
 hilt = "1.2.0"
 paging = "3.2.1"
+room = "2.6.1"
+coreDesugar = "1.1.5"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -25,6 +27,10 @@ dagger-hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", ve
 hilt-compiler = { group = "androidx.hilt", name = "hilt-compiler", version.ref = "hilt" }
 paging-runtime = { group = "androidx.paging", name = "paging-runtime", version.ref = "paging" }
 paging-compose = { group = "androidx.paging", name = "paging-compose", version.ref = "paging" }
+room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+room-paging = { group = "androidx.room", name = "room-paging", version.ref = "room" }
+core-desugar = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "coreDesugar" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

@@ -9,15 +9,18 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterEnd
 import androidx.compose.ui.Alignment.Companion.CenterStart
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.georgiyshur.muzztask.R
+import com.georgiyshur.muzztask.chat.presentation.ChatDateTimeFormatter
 import com.georgiyshur.muzztask.chat.presentation.ChatItem
 import com.georgiyshur.muzztask.ui.theme.MuzzPalette
 import com.georgiyshur.muzztask.ui.theme.Typography
@@ -42,11 +45,16 @@ internal fun ChatItem(
 private fun DateTimeChatItem(
     item: ChatItem.DateTime,
 ) {
+    val dateTimeFormatter = remember { ChatDateTimeFormatter() }
+    val context = LocalContext.current
     Text(
         modifier = Modifier
             .fillMaxWidth()
             .padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 8.dp),
-        text = item.dateTimeFormatted,
+        text = dateTimeFormatter.format(
+            context = context,
+            localDateTime = item.localDateTime
+        ),
         style = Typography.labelLarge,
         textAlign = TextAlign.Center,
         color = MuzzPalette.CoolGray,

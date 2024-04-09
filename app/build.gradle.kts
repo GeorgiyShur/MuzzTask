@@ -36,6 +36,9 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
+
+        // Flag to enable support for the new language APIs (java.time) on older devices
+        isCoreLibraryDesugaringEnabled = true
     }
     kotlinOptions {
         jvmTarget = "1.8"
@@ -57,6 +60,11 @@ dependencies {
     ksp(libs.hilt.compiler)
     implementation(libs.paging.runtime)
     implementation(libs.paging.compose)
+    implementation(libs.room.ktx)
+    ksp(libs.room.compiler)
+    implementation(libs.room.paging)
+
+    coreLibraryDesugaring(libs.core.desugar)
 
     debugImplementation(libs.androidx.ui.tooling)
 }

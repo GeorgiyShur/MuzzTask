@@ -1,9 +1,11 @@
 package com.georgiyshur.muzztask.chat.presentation
 
+import java.time.LocalDateTime
+
 internal sealed class ChatItem {
 
     data class DateTime(
-        val dateTimeFormatted: String,
+        val localDateTime: LocalDateTime,
     ): ChatItem()
 
     data class Message(
