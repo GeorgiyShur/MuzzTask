@@ -3,7 +3,9 @@ package com.georgiyshur.muzztask.chat.ui
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
@@ -38,6 +40,9 @@ internal fun ChatItem(
                 item = item,
             )
         }
+        ChatItem.ExtraSpacing -> {
+            Spacer(modifier = Modifier.height(8.dp))
+        }
     }
 }
 
@@ -50,7 +55,7 @@ private fun DateTimeChatItem(
     Text(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 8.dp),
+            .padding(16.dp),
         text = dateTimeFormatter.format(
             context = context,
             localDateTime = item.localDateTime
@@ -69,7 +74,7 @@ private fun MessageChatItem(
     Box(modifier = Modifier.fillMaxWidth()) {
         Box(
             modifier = Modifier
-                .padding(vertical = 4.dp, horizontal = 16.dp)
+                .padding(vertical = 1.dp, horizontal = 16.dp)
                 .run {
                     if (item.isSentByCurrentUser) {
                         padding(start = 48.dp)
@@ -82,8 +87,8 @@ private fun MessageChatItem(
                     shape = RoundedCornerShape(
                         topStart = 20.dp,
                         topEnd = 20.dp,
-                        bottomEnd = if (item.isSentByCurrentUser) 1.dp else 20.dp,
-                        bottomStart = if (item.isSentByCurrentUser) 20.dp else 1.dp,
+                        bottomEnd = if (item.isSentByCurrentUser) 2.dp else 20.dp,
+                        bottomStart = if (item.isSentByCurrentUser) 20.dp else 2.dp,
                     ),
                 )
                 .align(if (item.isSentByCurrentUser) CenterEnd else CenterStart),

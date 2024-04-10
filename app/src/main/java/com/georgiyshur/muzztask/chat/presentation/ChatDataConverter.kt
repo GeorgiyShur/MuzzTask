@@ -24,6 +24,14 @@ internal class ChatDataConverter @Inject constructor() {
                             .toLocalDateTime()
                     )
                 )
+            } else if (
+                lastMessage!!.creatorId != message.creatorId ||
+                Duration.between(
+                    lastMessage!!.createdAt,
+                    message.createdAt
+                ) > Duration.ofSeconds(20)
+            ) {
+                chatItems.add(ChatItem.ExtraSpacing)
             }
             chatItems.add(message.toChatItem(currentUserId))
             lastMessage = message
