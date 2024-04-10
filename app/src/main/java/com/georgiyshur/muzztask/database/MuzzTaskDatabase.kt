@@ -44,16 +44,16 @@ internal abstract class MuzzTaskDatabase : RoomDatabase() {
                                     Message(
                                         createdAt = ZonedDateTime.parse("2024-04-09T14:25:00Z"),
                                         creatorId = 2,
-                                        text = "Hiii, this is a long pre-populated message to showcase sectioning",
+                                        text = "Hiii, there is a couple of pre-populated message to showcase sectioning. A long message to test multiline.",
                                     ),
                                     Message(
                                         createdAt = ZonedDateTime.parse("2024-04-09T19:54:00Z"),
                                         creatorId = 1,
-                                        text = "Sure, when do you want to go?",
+                                        text = "Nice to hear that, when do you wanna go?",
                                     ),
                                     Message(
                                         createdAt = ZonedDateTime.parse("2024-04-09T19:57:00Z"),
-                                        creatorId = 12,
+                                        creatorId = 2,
                                         text = "Idk, how about tomorrow morning?",
                                     ),
                                 ).forEach {

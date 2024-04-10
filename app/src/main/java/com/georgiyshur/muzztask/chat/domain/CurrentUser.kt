@@ -1,4 +1,4 @@
-package com.georgiyshur.muzztask.chat.presentation
+package com.georgiyshur.muzztask.chat.domain
 
 import androidx.annotation.DrawableRes
 import androidx.compose.ui.graphics.Color

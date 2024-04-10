@@ -43,7 +43,7 @@ import com.georgiyshur.muzztask.R
 import com.georgiyshur.muzztask.chat.presentation.ChatItem
 import com.georgiyshur.muzztask.chat.presentation.ChatViewModel
 import com.georgiyshur.muzztask.chat.presentation.ChatViewState
-import com.georgiyshur.muzztask.chat.presentation.CurrentUser
+import com.georgiyshur.muzztask.chat.domain.CurrentUser
 import com.georgiyshur.muzztask.ui.theme.Typography
 import java.time.LocalDateTime
 
