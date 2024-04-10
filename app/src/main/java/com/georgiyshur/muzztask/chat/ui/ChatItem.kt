@@ -70,6 +70,13 @@ private fun MessageChatItem(
         Box(
             modifier = Modifier
                 .padding(vertical = 4.dp, horizontal = 16.dp)
+                .run {
+                    if (item.isSentByCurrentUser) {
+                        padding(start = 48.dp)
+                    } else {
+                        padding(end = 48.dp)
+                    }
+                }
                 .background(
                     color = if (item.isSentByCurrentUser) color else MuzzPalette.FogGray,
                     shape = RoundedCornerShape(
@@ -99,7 +106,7 @@ private fun BoxScope.ReadIndicator(isRead: Boolean) {
     Icon(
         modifier = Modifier
             .align(Alignment.BottomEnd)
-            .padding(end = 4.dp),
+            .padding(end = 2.dp),
         painter = painterResource(if (isRead) R.drawable.ic_double_tick else R.drawable.ic_tick),
         contentDescription = null,
         tint = Color.White,

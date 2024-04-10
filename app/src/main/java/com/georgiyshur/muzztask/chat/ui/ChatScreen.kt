@@ -6,12 +6,9 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -83,17 +80,14 @@ private fun ChatScreen(
                 onSwitchUserClick = onSwitchUserClick,
             )
         },
-    ) { contentPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(contentPadding)
-        ) {
+        content = { padding ->
             MessagesContent(
+                modifier = Modifier.padding(padding),
                 chatData = viewState.chatData,
                 color = viewState.currentUser.color,
             )
-            Box(modifier = Modifier.weight(1f))
+        },
+        bottomBar = {
             SendMessageBar(
                 color = viewState.currentUser.color,
                 onSendClick = onSendClick,
@@ -101,7 +95,7 @@ private fun ChatScreen(
                 text = viewState.messageText,
             )
         }
-    }
+    )
 }
 
 @Composable
@@ -174,13 +168,14 @@ private fun TopBar(
 
 @Composable
 private fun MessagesContent(
+    modifier: Modifier,
     chatData: List<ChatItem>,
     color: Color,
 ) {
     val lazyListState = rememberLazyListState()
 
     LazyColumn(
-        modifier = Modifier.wrapContentHeight(),
+        modifier = modifier.wrapContentHeight(),
         state = lazyListState,
         reverseLayout = true,
         verticalArrangement = Arrangement.Bottom,

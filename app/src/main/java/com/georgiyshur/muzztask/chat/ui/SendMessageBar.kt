@@ -1,11 +1,10 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package com.georgiyshur.muzztask.chat.ui
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
@@ -15,9 +14,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.FloatingActionButtonDefaults
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -74,16 +72,16 @@ internal fun SendMessageBar(
                 }
             )
             Spacer(modifier = Modifier.width(16.dp))
-            FloatingActionButton(
+            Button(
                 modifier = Modifier.size(40.dp),
-                containerColor = color,
-                onClick = onSendClick,
-                elevation = FloatingActionButtonDefaults.elevation(
-                    pressedElevation = 0.dp,
-                    defaultElevation = 0.dp,
-                    focusedElevation = 0.dp,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = color,
+                    disabledContainerColor = color.copy(alpha = 0.3f),
                 ),
+                onClick = onSendClick,
                 shape = CircleShape,
+                contentPadding = PaddingValues(0.dp),
+                enabled = text.isNotBlank(),
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_send),
